@@ -1,5 +1,5 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram.utils.keyboard import ReplyKeyboardBuilder
+from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 from lexicon.lexicon_ru import LEXICON_RU
 
@@ -39,6 +39,7 @@ yes_no_kb_builder.row(button_yes, button_no, width=2)
 yes_no_kb = yes_no_kb_builder.as_markup(
                                 one_time_keyboard=True,
                                 resize_keyboard=True)
+
 
 # ------- Создаем игровую клавиатуру без использования билдера -------
 
@@ -83,3 +84,15 @@ keyboard: InlineKeyboardMarkup = InlineKeyboardMarkup(
                      [url_button_2],
                      [url_button_3],
                      [url_button_4]])
+
+
+# Функция, генерирующая клавиатуру для модуля Анекдоты
+def create_joke_keyboard(*buttons: str) -> InlineKeyboardMarkup:
+    # Инициализируем билдер
+    kb_builder: InlineKeyboardBuilder = InlineKeyboardBuilder()
+    # Добавляем в билдер ряд с кнопками
+    kb_builder.row(*[InlineKeyboardButton(
+        text=LEXICON_RU[button] if button in LEXICON_RU else button,
+        callback_data=button) for button in buttons])
+    # Возвращаем объект инлайн-клавиатуры
+    return kb_builder.as_markup()

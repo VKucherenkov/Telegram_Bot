@@ -14,7 +14,6 @@ from services.services import get_bot_choice, get_winner
 from services.file_handling import book
 from pprint import pprint
 
-from services.weather import city_weather
 from config_data.config import Config, load_config
 
 router: Router = Router()
@@ -62,7 +61,7 @@ async def process_yes_answer(message: Message):
 # Этот хэндлер срабатывает на отказ пользователя играть в игру
 @router.message(Text(text=LEXICON_RU['no_button']))
 async def process_no_answer(message: Message):
-    await message.answer(text=LEXICON_RU['no'])
+    await message.answer(text=LEXICON_RU['no'], reply_markup=start_kb)
 
 
 # Этот хэндлер срабатывает на любую из игровых кнопок

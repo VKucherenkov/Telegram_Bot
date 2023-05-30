@@ -15,9 +15,11 @@ config: Config = load_config()
 @router.message(Text(text=[LEXICON_RU['weather'], '/weather', 'weather']))
 async def process_weather_text(message: Message):
     await message.answer(text='Введите сначала слово город затем название города например "город Москва"')
+
+# Этот хэндлер срабатывает на ввод города для получения погоды
 @router.message(Text(startswith='город', ignore_case=True))
 async def process_weather_city(message: Message):
-    await message.answer(text=city_weather(message.text.split()[1], '1409006fad6778e23775e07dca0729b6'))
+    await message.answer(text=city_weather(message.text.split()[1], config.tg_bot.weather_api))
     try:
         temp = weather.data['main']['temp']
         print(weather, temp)
