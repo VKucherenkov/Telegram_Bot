@@ -19,9 +19,11 @@ async def process_joke_yes_text(message: Message):
 @router.callback_query(Text(text=[LEXICON_RU['yes_joke']]))
 async def process_joke_yes_text(callback: CallbackQuery):
     await callback.message.answer(text=joke(), reply_markup=callback.message.reply_markup)
+    await callback.answer()
 
 # Этот хэндлер срабатывает на нажатие инлайн кнопки no_joke
 @router.callback_query(Text(text=[LEXICON_RU['no_joke']]))
 async def process_joke_no_text(callback: CallbackQuery):
     await callback.message.answer(text='Печалька , тогда давай займемся чем-то другим\n\n'
                                         'Выбирай!', reply_markup=start_kb)
+    await callback.answer()
