@@ -24,11 +24,11 @@ async def process_weather_city(message: Message):
         temp = weather.data['main']['temp']
         print(weather, temp)
         if temp < -10:
-            image = r'media\frozen.jpg'
+            image = r'media/frozen.jpg'
         elif -10 <= temp <= 20:
-            image = r'media\prohladno.jpg'
+            image = r'media/prohladno.jpg'
         else:
-            image = r'media\well_weather.jpg'
+            image = r'media/well_weather.jpg'
         photo = FSInputFile(image)
         await message.answer_photo(photo)
     except Exception:
