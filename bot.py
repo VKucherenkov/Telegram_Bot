@@ -3,7 +3,7 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
-from handlers import other_handlers, user_handlers, weather_handlers, joke_handlers
+from handlers import other_handlers, user_handlers, weather_handlers, joke_handlers, phraz_handlers
 from keyboards.main_menu import set_main_menu
 
 # Инициализируем логгер
@@ -37,6 +37,7 @@ async def main():
     dp.include_router(user_handlers.router)
     dp.include_router(weather_handlers.router)
     dp.include_router(joke_handlers.router)
+    dp.include_router(phraz_handlers.router)
     dp.include_router(other_handlers.router)
 
     # Пропускаем накопившиеся апдейты и запускаем polling

@@ -19,7 +19,7 @@ async def process_weather_text(message: Message):
 # Этот хэндлер срабатывает на ввод города для получения погоды
 @router.message(Text(startswith='город', ignore_case=True))
 async def process_weather_city(message: Message):
-    await message.answer(text=city_weather(message.text.split()[1], config.tg_bot.weather_api))
+    await message.answer(text=city_weather(' '.join(message.text.split()[1:]), config.tg_bot.weather_api))
     try:
         temp = weather.data['main']['temp']
         print(weather, temp)

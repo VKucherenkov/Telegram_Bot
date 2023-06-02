@@ -10,16 +10,17 @@ button_game: KeyboardButton = KeyboardButton(text=LEXICON_RU['game'])
 button_book: KeyboardButton = KeyboardButton(text=LEXICON_RU['book'])
 button_weather: KeyboardButton = KeyboardButton(text=LEXICON_RU['weather'])
 button_joke: KeyboardButton = KeyboardButton(text=LEXICON_RU['joke'])
+button_phraz: KeyboardButton = KeyboardButton(text=LEXICON_RU['phraz'])
 
 
 # Инициализируем билдер для клавиатуры с кнопками game и book
-game_start_kb_builder: ReplyKeyboardBuilder = ReplyKeyboardBuilder()
+start_kb_builder: ReplyKeyboardBuilder = ReplyKeyboardBuilder()
 
 # Добавляем кнопки в билдер с параметром width=2
-game_start_kb_builder.row(button_game, button_book, button_weather, button_joke, width=2)
+start_kb_builder.row(button_game, button_book, button_weather, button_joke, button_phraz, width=2)
 
 # Создаем клавиатуру с кнопками game и book
-start_kb = game_start_kb_builder.as_markup(
+start_kb = start_kb_builder.as_markup(
                                 one_time_keyboard=True,
                                 resize_keyboard=True)
 
@@ -88,6 +89,18 @@ keyboard: InlineKeyboardMarkup = InlineKeyboardMarkup(
 
 # Функция, генерирующая клавиатуру для модуля Анекдоты
 def create_joke_keyboard(*buttons: str) -> InlineKeyboardMarkup:
+    # Инициализируем билдер
+    kb_builder: InlineKeyboardBuilder = InlineKeyboardBuilder()
+    # Добавляем в билдер ряд с кнопками
+    kb_builder.row(*[InlineKeyboardButton(
+        text=LEXICON_RU[button] if button in LEXICON_RU else button,
+        callback_data=button) for button in buttons])
+    # Возвращаем объект инлайн-клавиатуры
+    return kb_builder.as_markup()
+
+
+# Функция, генерирующая клавиатуру для модуля Крылатые фразы
+def create_phraz_keyboard(*buttons: str) -> InlineKeyboardMarkup:
     # Инициализируем билдер
     kb_builder: InlineKeyboardBuilder = InlineKeyboardBuilder()
     # Добавляем в билдер ряд с кнопками
