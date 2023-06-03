@@ -109,3 +109,49 @@ def create_phraz_keyboard(*buttons: str) -> InlineKeyboardMarkup:
         callback_data=button) for button in buttons])
     # Возвращаем объект инлайн-клавиатуры
     return kb_builder.as_markup()
+
+
+def get_kb_create() -> ReplyKeyboardMarkup:
+    button1 = KeyboardButton(text='Начать заполнение анкеты')
+    button2 = KeyboardButton(text='Не буду заполнять')
+
+    kb_create = ReplyKeyboardMarkup(keyboard=[[button1, button2]],
+                                    resize_keyboard=True)
+    return kb_create
+
+def get_kb_cancel() -> ReplyKeyboardMarkup:
+    button1 = KeyboardButton(text='Передумал заполнять')
+    kb_cancel = ReplyKeyboardMarkup(keyboard=[[button1]],
+                                    resize_keyboard=True)
+    return kb_cancel
+
+def get_kb_gender():
+    # Создаем объекты инлайн-кнопок
+    male_button = InlineKeyboardButton(text='Мужской ♂',
+                                       callback_data='Мужской')
+    female_button = InlineKeyboardButton(text='Женский ♀',
+                                         callback_data='Женский')
+    undefined_button = InlineKeyboardButton(text='🤷 Пока не ясно',
+                                            callback_data='Пока не ясно')
+    # Добавляем кнопки в клавиатуру (две в одном ряду и одну в другом)
+    keyboard: list[list[InlineKeyboardButton]] = [[male_button, female_button],
+                                                  [undefined_button]]
+    # Создаем объект инлайн-клавиатуры
+    markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
+    return markup
+
+def get_kb_education():
+    # Создаем объекты инлайн-кнопок
+    secondary_button = InlineKeyboardButton(text='Среднее',
+                                            callback_data='Среднее')
+    higher_button = InlineKeyboardButton(text='Высшее',
+                                         callback_data='Высшее')
+    no_edu_button = InlineKeyboardButton(text='🤷 Нету',
+                                         callback_data='Нету')
+    # Добавляем кнопки в клавиатуру (две в одном ряду и одну в другом)
+    keyboard: list[list[InlineKeyboardButton]] = [
+        [secondary_button, higher_button],
+        [no_edu_button]]
+    # Создаем объект инлайн-клавиатуры
+    markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
+    return markup

@@ -24,7 +24,6 @@ async def process_phraz_text(callback: CallbackQuery):
     await callback.message.edit_text(text=phraz(), reply_markup=callback.message.reply_markup)
     # await callback.answer()
 
-
 # Этот хэндлер срабатывает на нажатие инлайн кнопки no_phraz
 @router.callback_query(Text(text=[LEXICON_RU['no_phraz']]))
 async def process_phraz_no_text(callback: CallbackQuery):

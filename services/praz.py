@@ -27,4 +27,4 @@ def phraz():
 
 
 if __name__ == '__main__':
-    print(phraz())
+    print(phraz_days())

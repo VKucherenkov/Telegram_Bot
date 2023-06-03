@@ -3,7 +3,7 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
-from handlers import other_handlers, user_handlers, weather_handlers, joke_handlers, phraz_handlers
+from handlers import other_handlers, user_handlers, weather_handlers, joke_handlers, phraz_handlers, quest_handlers
 from keyboards.main_menu import set_main_menu
 
 # Инициализируем логгер
@@ -34,6 +34,7 @@ async def main():
 
 
     # Регистриуем роутеры в диспетчере
+    dp.include_router(quest_handlers.router)
     dp.include_router(user_handlers.router)
     dp.include_router(weather_handlers.router)
     dp.include_router(joke_handlers.router)
