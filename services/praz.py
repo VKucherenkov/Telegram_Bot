@@ -1,8 +1,6 @@
 import random
 from datetime import datetime
 
-some_data = datetime(2023, 6, 2)
-now_data = datetime.now()
 
 phraz_res = []
 
@@ -11,6 +9,8 @@ def phraz_days():
     with open(r'database/phraz_result.txt', 'r',
               encoding='utf-8') as file:
         phraz_day = [i.strip() for i in file.readlines()]
+    some_data = datetime(2023, 6, 2)
+    now_data = datetime.now()
     return phraz_day[(now_data - some_data).days % len(phraz_day)]
 
 
