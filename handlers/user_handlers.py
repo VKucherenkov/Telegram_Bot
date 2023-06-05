@@ -15,6 +15,7 @@ from services.file_handling import book
 from pprint import pprint
 
 from config_data.config import Config, load_config
+from services.sqlite import create_profile
 
 router: Router = Router()
 config: Config = load_config()
@@ -23,7 +24,9 @@ config: Config = load_config()
 # Этот хэндлер срабатывает на команду /start
 @router.message(CommandStart())
 async def process_start_command(message: Message):
-    pprint(message.from_user.first_name)
+    print(message.from_user.first_name, message.from_user.id)
+    pprint(message)
+    await create_profile(user_id=message.from_user.id)
     await message.answer(text=LEXICON_RU['/start'], reply_markup=start_kb)
 
 

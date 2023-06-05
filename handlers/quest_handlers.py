@@ -8,6 +8,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message, InlineKe
 from aiogram import F
 
 from keyboards.keyboards import get_kb_cancel, get_kb_gender, get_kb_education, get_kb_create, start_kb
+from services.sqlite import edit_profile
 
 router: Router = Router()
 
@@ -29,6 +30,7 @@ class ClientStatesGroup(StatesGroup):
 
 @router.message(Command(commands=['create']))
 async def cmd_create(message: Message) -> None:
+    pprint(message)
     await message.answer('Давай заполним анкетку', reply_markup=get_kb_create())
 
 
@@ -122,18 +124,23 @@ async def load_education(callback, state: FSMContext):
     await callback.message.answer(text='Спасибо! Заполнение анкеты завершено!'
                                        'Вот данные Вашей анкеты:')
     # Завершаем машину состояний
-    user_dict[callback.message.from_user.id] = await state.get_data()
+    user_dict[callback.message.chat.id] = await state.get_data()
     pprint(user_dict)
+    print(user_dict.keys())
+    pprint(callback.message)
+    await edit_profile(user_dict, user_id=callback.message.chat.id)
+
     await state.clear()
     await callback.message.answer(text='Вот данные твоей анкеты:', reply_markup=start_kb)
     await callback.message.answer_photo(
-        photo=user_dict[callback.message.from_user.id]['photo'],
-        caption=f'Имя: {user_dict[callback.message.from_user.id]["name"]}\n'
-                f'Email: {user_dict[callback.message.from_user.id]["user_email"]}\n'
-                f'Описание: {user_dict[callback.message.from_user.id]["desc"]}\n'
-                f'Пол: {user_dict[callback.message.from_user.id]["gender"]}\n'
-                f'Возраст: {user_dict[callback.message.from_user.id]["age"]}\n'
-                f'Образование: {user_dict[callback.message.from_user.id]["education"]}\n')
+        photo=user_dict[callback.message.chat.id]['photo'],
+        caption=f'Имя: {user_dict[callback.message.chat.id]["name"]}\n'
+                f'Email: {user_dict[callback.message.chat.id]["user_email"]}\n'
+                f'Описание: {user_dict[callback.message.chat.id]["desc"]}\n'
+                f'Пол: {user_dict[callback.message.chat.id]["gender"]}\n'
+                f'Возраст: {user_dict[callback.message.chat.id]["age"]}\n'
+                f'Образование: {user_dict[callback.message.chat.id]["education"]}\n')
+
 
 @router.message(StateFilter(ClientStatesGroup.user_education))
 async def check_education(message):
