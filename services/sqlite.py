@@ -5,7 +5,7 @@ import sqlite3 as sq
 async def db_start():
     global db, cur
 
-    db = sq.connect(r'database/anketa.db')
+    db = sq.connect(r'database/anketa_log.db')
     cur = db.cursor()
 
     cur.execute("CREATE TABLE IF NOT EXISTS profile(user_id TEXT PRIMARY KEY, photo TEXT, name TEXT, email TEXT, "

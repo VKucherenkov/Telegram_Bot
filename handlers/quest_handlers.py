@@ -4,7 +4,7 @@ from aiogram import Router
 from aiogram.filters import Command, Text, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State, default_state
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import Message
 from aiogram import F
 
 from keyboards.keyboards import get_kb_cancel, get_kb_gender, get_kb_education, get_kb_create, start_kb
