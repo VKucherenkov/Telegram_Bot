@@ -1,3 +1,4 @@
+import logging
 from copy import deepcopy
 
 from aiogram import Router, Bot
@@ -33,37 +34,47 @@ async def process_start_command(message: Message):
 # Этот хэндлер срабатывает на команду /help
 @router.message(Command(commands=['help']))
 async def process_help_command(message: Message):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(text=LEXICON_RU['/help'])
 
 
 # Этот хэндлер срабатывает на команду /game и текст - Игра "Камень, ножницы, бумага"
 @router.message(Command(commands=['game']))
 async def process_start_command(message: Message):
-    pprint(message.from_user.first_name)
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(text=LEXICON_RU['/game'], reply_markup=yes_no_kb)
 
 
 @router.message(Text(text=LEXICON_RU['game']))
 async def process_start_command(message: Message):
-    pprint(message.from_user.first_name)
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(text=LEXICON_RU['/game'], reply_markup=yes_no_kb)
 
 
 # Этот хэндлер срабатывает на команду /game-help
 @router.message(Command(commands=['game_help']))
 async def process_help_command(message: Message):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(text=LEXICON_RU['/game_help'], reply_markup=yes_no_kb)
 
 
 # Этот хэндлер срабатывает на согласие пользователя играть в игру
 @router.message(Text(text=LEXICON_RU['yes_button']))
 async def process_yes_answer(message: Message):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(text=LEXICON_RU['yes'], reply_markup=game_kb)
 
 
 # Этот хэндлер срабатывает на отказ пользователя играть в игру
 @router.message(Text(text=LEXICON_RU['no_button']))
 async def process_no_answer(message: Message):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(text=LEXICON_RU['no'], reply_markup=start_kb)
 
 
@@ -83,6 +94,8 @@ async def process_game_button(message: Message):
 # и удалять кнопку Menu c командами
 @router.message(Command(commands='delmenu'))
 async def del_main_menu(message: Message, bot: Bot):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await bot.delete_my_commands()
     await message.answer(text='Кнопка "Menu" удалена')
 
@@ -91,6 +104,8 @@ async def del_main_menu(message: Message, bot: Bot):
 # и отправлять в чат клавиатуру c url-кнопками
 @router.message(Command(commands='url'))
 async def process_start_command(message: Message):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(text='Это инлайн-кнопки с параметром "url"',
                          reply_markup=keyboard)
 
@@ -100,6 +115,8 @@ async def process_start_command(message: Message):
 # и отправлять ему приветственное сообщение
 @router.message(Command(commands='book'))
 async def process_start_command(message: Message):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(LEXICON_RU['/book'])
     if message.from_user.id not in users_db:
         users_db[message.from_user.id] = deepcopy(user_dict_template)
@@ -107,6 +124,8 @@ async def process_start_command(message: Message):
 
 @router.message(Text(text=LEXICON_RU['book']))
 async def process_start_command(message: Message):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(LEXICON_RU['/book'])
     if message.from_user.id not in users_db:
         users_db[message.from_user.id] = deepcopy(user_dict_template)
@@ -116,6 +135,8 @@ async def process_start_command(message: Message):
 # и отправлять пользователю сообщение со списком доступных команд в боте
 @router.message(Command(commands='book_help'))
 async def process_help_command(message: Message):
+    logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
+                 f'fullname: {message.from_user.full_name}')
     await message.answer(LEXICON_RU['/book_help'])
 
 
