@@ -7,6 +7,7 @@ from aiogram import Router
 from config_data.config import load_config, Config
 from lexicon.lexicon_ru import LEXICON_RU
 from services import weather
+from services.answer_to_admin import answer_to_admin
 from services.weather import city_weather
 
 router: Router = Router()
@@ -18,6 +19,7 @@ config: Config = load_config()
 async def process_weather_text(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text='Введите сначала слово город затем название города например "город Москва"')
 
 # Этот хэндлер срабатывает на ввод города для получения погоды
@@ -25,6 +27,7 @@ async def process_weather_text(message: Message):
 async def process_weather_city(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text=city_weather(' '.join(message.text.split()[1:]), config.tg_bot.weather_api))
     try:
         temp = weather.data['main']['temp']

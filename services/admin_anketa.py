@@ -1,6 +1,5 @@
-import datetime
 import sqlite3 as sq
-from pprint import pprint
+
 
 
 def get_ankets():

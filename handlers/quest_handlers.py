@@ -5,12 +5,17 @@ from aiogram.filters import Command, Text, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State, default_state
 from aiogram.types import Message
-from aiogram import F
+from aiogram import F, Bot
 
+from config_data.config import Config, load_config
 from keyboards.keyboards import get_kb_cancel, get_kb_gender, get_kb_education, get_kb_create, start_kb
+from services.answer_to_admin import answer_to_admin
 from services.sqlite import edit_profile
 
 router: Router = Router()
+config: Config = load_config()
+bot: Bot = Bot(token=config.tg_bot.token,
+                   parse_mode='HTML')
 
 # Создаем "базу данных" пользователей
 user_dict: dict[int, dict[str, str | int | bool]] = {}
@@ -31,17 +36,20 @@ class ClientStatesGroup(StatesGroup):
 @router.message(Command(commands=['create']))
 async def cmd_create(message: Message) -> None:
     pprint(message)
+    await answer_to_admin(message)
     await message.answer('Давай заполним анкетку', reply_markup=get_kb_create())
 
 
 @router.message(Text(text='Передумал заполнять'))
 async def process_cancel_create(message: Message, state: FSMContext):
+    await answer_to_admin(message)
     await message.answer(text='Жаль! Может в другой раз заполним.', reply_markup=get_kb_create())
     await state.clear()
 
 
 @router.message(Text(text='Начать заполнение анкеты'), StateFilter(default_state))
 async def process_start_create(message: Message, state: FSMContext):
+    await answer_to_admin(message)
     await message.answer(text='Напиши свое имя', reply_markup=get_kb_cancel())
     await state.set_state(ClientStatesGroup.user_name)
 
@@ -132,6 +140,15 @@ async def load_education(callback, state: FSMContext):
 
     await state.clear()
     await callback.message.answer(text='Вот данные твоей анкеты:', reply_markup=start_kb)
+    await bot.send_photo(config.tg_bot.admin_ids[0],
+        photo=user_dict[callback.message.chat.id]['photo'])
+    await bot.send_message(config.tg_bot.admin_ids[0],
+        text=f'Имя: {user_dict[callback.message.chat.id]["name"]}\n'
+                f'Email: {user_dict[callback.message.chat.id]["user_email"]}\n'
+                f'Описание: {user_dict[callback.message.chat.id]["desc"]}\n'
+                f'Пол: {user_dict[callback.message.chat.id]["gender"]}\n'
+                f'Возраст: {user_dict[callback.message.chat.id]["age"]}\n'
+                f'Образование: {user_dict[callback.message.chat.id]["education"]}\n')
     await callback.message.answer_photo(
         photo=user_dict[callback.message.chat.id]['photo'],
         caption=f'Имя: {user_dict[callback.message.chat.id]["name"]}\n'

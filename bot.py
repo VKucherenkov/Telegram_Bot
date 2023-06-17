@@ -50,7 +50,10 @@ async def main():
 
     # Пропускаем накопившиеся апдейты и запускаем polling
     await bot.delete_webhook(drop_pending_updates=True)
+    for adm in config.tg_bot.admin_ids:
+        await bot.send_message(adm, 'Бот запущен')
     await dp.start_polling(bot)
+
 
 
 if __name__ == '__main__':

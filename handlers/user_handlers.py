@@ -2,8 +2,10 @@ import logging
 from copy import deepcopy
 
 from aiogram import Router, Bot
+
 from aiogram.filters import Command, CommandStart, Text
 from aiogram.types import Message, CallbackQuery, FSInputFile
+
 
 from database.database import users_db, user_dict_template
 from filters.filters import IsDelBookmarkCallbackData, IsDigitCallbackData
@@ -11,6 +13,7 @@ from keyboards.bookmarks_kb import (create_bookmarks_keyboard, create_edit_keybo
 from keyboards.pagination_kb import create_pagination_keyboard
 from keyboards.keyboards import game_kb, yes_no_kb, keyboard, start_kb
 from lexicon.lexicon_ru import LEXICON_RU
+from services.answer_to_admin import answer_to_admin
 from services.services import get_bot_choice, get_winner
 from services.file_handling import book
 from pprint import pprint
@@ -21,6 +24,8 @@ from services.sqlite import create_profile
 router: Router = Router()
 config: Config = load_config()
 
+bot: Bot = Bot(token=config.tg_bot.token,
+                   parse_mode='HTML')
 
 # Этот хэндлер срабатывает на команду /start
 @router.message(CommandStart())
@@ -28,6 +33,7 @@ async def process_start_command(message: Message):
     print(message.from_user.first_name, message.from_user.id)
     pprint(message)
     await create_profile(user_id=message.from_user.id)
+    await answer_to_admin(message)
     await message.answer(text=LEXICON_RU['/start'], reply_markup=start_kb)
 
 
@@ -36,6 +42,7 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text=LEXICON_RU['/help'])
 
 
@@ -44,6 +51,7 @@ async def process_help_command(message: Message):
 async def process_start_command(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text=LEXICON_RU['/game'], reply_markup=yes_no_kb)
 
 
@@ -51,6 +59,7 @@ async def process_start_command(message: Message):
 async def process_start_command(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text=LEXICON_RU['/game'], reply_markup=yes_no_kb)
 
 
@@ -59,6 +68,7 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text=LEXICON_RU['/game_help'], reply_markup=yes_no_kb)
 
 
@@ -67,6 +77,7 @@ async def process_help_command(message: Message):
 async def process_yes_answer(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text=LEXICON_RU['yes'], reply_markup=game_kb)
 
 
@@ -75,6 +86,7 @@ async def process_yes_answer(message: Message):
 async def process_no_answer(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text=LEXICON_RU['no'], reply_markup=start_kb)
 
 
@@ -84,9 +96,11 @@ async def process_no_answer(message: Message):
                            LEXICON_RU['scissors']]))
 async def process_game_button(message: Message):
     bot_choice = get_bot_choice()
+    await answer_to_admin(message)
     await message.answer(text=f'{LEXICON_RU["bot_choice"]} '
                               f'- {LEXICON_RU[bot_choice]}')
     winner = get_winner(message.text, bot_choice)
+    await answer_to_admin(message)
     await message.answer(text=LEXICON_RU[winner], reply_markup=yes_no_kb)
 
 
@@ -97,6 +111,7 @@ async def del_main_menu(message: Message, bot: Bot):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
     await bot.delete_my_commands()
+    await answer_to_admin(message)
     await message.answer(text='Кнопка "Menu" удалена')
 
 
@@ -106,6 +121,7 @@ async def del_main_menu(message: Message, bot: Bot):
 async def process_start_command(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text='Это инлайн-кнопки с параметром "url"',
                          reply_markup=keyboard)
 
@@ -117,6 +133,7 @@ async def process_start_command(message: Message):
 async def process_start_command(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(LEXICON_RU['/book'])
     if message.from_user.id not in users_db:
         users_db[message.from_user.id] = deepcopy(user_dict_template)
@@ -126,6 +143,7 @@ async def process_start_command(message: Message):
 async def process_start_command(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(LEXICON_RU['/book'])
     if message.from_user.id not in users_db:
         users_db[message.from_user.id] = deepcopy(user_dict_template)
@@ -137,6 +155,7 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(LEXICON_RU['/book_help'])
 
 
@@ -146,6 +165,7 @@ async def process_help_command(message: Message):
 async def process_beginning_command(message: Message):
     users_db[message.from_user.id]['page'] = 1
     text = book[users_db[message.from_user.id]['page']]
+    await answer_to_admin(message)
     await message.answer(
         text=text,
         reply_markup=create_pagination_keyboard(
@@ -160,6 +180,7 @@ async def process_beginning_command(message: Message):
 @router.message(Command(commands='continue'))
 async def process_continue_command(message: Message):
     text = book[users_db[message.from_user.id]['page']]
+    await answer_to_admin(message)
     await message.answer(
         text=text,
         reply_markup=create_pagination_keyboard(
@@ -173,6 +194,7 @@ async def process_continue_command(message: Message):
 # если они есть или сообщение о том, что закладок нет
 @router.message(Command(commands='bookmarks'))
 async def process_bookmarks_command(message: Message):
+    await answer_to_admin(message)
     if users_db[message.from_user.id]["bookmarks"]:
         await message.answer(
             text=LEXICON_RU[message.text],

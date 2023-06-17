@@ -6,6 +6,7 @@ from aiogram import Router
 
 from keyboards.keyboards import create_phraz_keyboard, start_kb
 from lexicon.lexicon_ru import LEXICON_RU
+from services.answer_to_admin import answer_to_admin
 from services.praz import phraz
 
 
@@ -18,6 +19,7 @@ async def process_phraz_text(message: Message):
                  f'fullname: {message.from_user.full_name}')
     image = r'media/photo_eji_lec.jpg'
     photo = FSInputFile(image)
+    await answer_to_admin(message)
     await message.answer_photo(photo)
     await message.answer(text=phraz(), reply_markup=create_phraz_keyboard(
                 LEXICON_RU['yes_phraz'], LEXICON_RU['no_phraz']))

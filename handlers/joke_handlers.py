@@ -6,6 +6,7 @@ from aiogram import Router
 
 from keyboards.keyboards import create_joke_keyboard, start_kb
 from lexicon.lexicon_ru import LEXICON_RU
+from services.answer_to_admin import answer_to_admin
 from services.parser_joke import joke
 
 
@@ -16,6 +17,7 @@ router: Router = Router()
 async def process_joke_yes_text(message: Message):
     logging.info(f'сообщение: "{message.text}", user id: {message.from_user.id}, '
                  f'fullname: {message.from_user.full_name}')
+    await answer_to_admin(message)
     await message.answer(text=joke(), reply_markup=create_joke_keyboard(
                 LEXICON_RU['yes_joke'], LEXICON_RU['no_joke']))
 
