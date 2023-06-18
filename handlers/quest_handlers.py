@@ -10,7 +10,7 @@ from aiogram import F, Bot
 from config_data.config import Config, load_config
 from keyboards.keyboards import get_kb_cancel, get_kb_gender, get_kb_education, get_kb_create, start_kb
 from services.answer_to_admin import answer_to_admin
-from services.sqlite import edit_profile
+from services.psql import edit_profile
 
 router: Router = Router()
 config: Config = load_config()

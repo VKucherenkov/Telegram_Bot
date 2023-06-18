@@ -1,5 +1,5 @@
 from aiogram import Router
-from aiogram.filters import Command, Text, StateFilter
+from aiogram.filters import Text
 from services.admin_anketa import get_ankets
 
 router: Router = Router()

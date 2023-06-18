@@ -19,7 +19,7 @@ from services.file_handling import book
 from pprint import pprint
 
 from config_data.config import Config, load_config
-from services.sqlite import create_profile
+from services.psql import create_profile
 
 router: Router = Router()
 config: Config = load_config()

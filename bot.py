@@ -7,7 +7,7 @@ from admin import admin
 from config_data.config import Config, load_config
 from handlers import other_handlers, user_handlers, weather_handlers, joke_handlers, phraz_handlers, quest_handlers
 from keyboards.main_menu import set_main_menu
-from services.sqlite import db_start
+from services.psql import db_start
 
 # Инициализируем логгер
 logger = logging.getLogger(__name__)
