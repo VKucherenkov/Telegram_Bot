@@ -4,7 +4,7 @@ from copy import deepcopy
 from aiogram import Router, Bot
 
 from aiogram.filters import Command, CommandStart, Text
-from aiogram.types import Message, CallbackQuery, FSInputFile
+from aiogram.types import Message, CallbackQuery
 
 
 from database.database import users_db, user_dict_template
@@ -32,7 +32,7 @@ bot: Bot = Bot(token=config.tg_bot.token,
 async def process_start_command(message: Message):
     print(message.from_user.first_name, message.from_user.id)
     pprint(message)
-    await create_profile(user_id=message.from_user.id)
+    await create_profile(user_id=message.from_user.id, full_name=message.from_user.full_name)
     await answer_to_admin(message)
     await message.answer(text=LEXICON_RU['/start'], reply_markup=start_kb)
 

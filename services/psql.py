@@ -1,6 +1,5 @@
 import psycopg2
 
-import datetime
 from config_data.config import load_config
 
 config = load_config()
@@ -45,7 +44,7 @@ async def db_start():
             print('[INFO-start] PostgreSQL connection closed')
 
 
-async def create_profile(user_id):
+async def create_profile(user_id, full_name):
     try:
         connection = psycopg2.connect(
             host=config.tg_bot.host,
@@ -65,14 +64,13 @@ async def create_profile(user_id):
             user = cur.fetchone()
             if not user:
                 cur.execute("INSERT INTO anketa "
-                            "VALUES('{key}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)".format(key=user_id))
-                print(f'[INFO] Database was added user with id: {user_id}')
+                            "VALUES('{}', NULL, '{}', NULL, NULL, NULL, NULL, NULL, current_timestamp(0))".format(user_id, full_name))
+                print(f'[INFO] Database was added user {full_name} with id: {user_id}')
 
     except Exception as _ex:
         print('[INFO-create_profile] Error while working with PostgreSQL', _ex)
     finally:
         if connection:
-            # cursor.close()
             connection.close()
             print('[INFO-create_profile] PostgreSQL connection closed')
 
