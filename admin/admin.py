@@ -13,10 +13,10 @@ async def get_anket(callback):
             photo=user[1],
             caption=f'Имя: {user[2]}\n'
                     f'Email: {user[3]}\n'
-                    f'Описание: {user[4]}\n'
+                    f'Описание: {user[7]}\n'
                     f'Пол: {user[5]}\n'
                     f'Возраст: {user[6]}\n'
-                    f'Образование: {user[7]}\n'
+                    f'Образование: {user[4]}\n'
                     f'Время размещения: {user[8]}\n')
 
 @router.message(Text(text=['Показать пользователей']))
@@ -28,18 +28,18 @@ async def get_anket(message):
                 caption=f'User_id: {user[0]}\n'
                         f'Имя: {user[2]}\n'
                         f'Email: {user[3]}\n'
-                        f'Описание: {user[4]}\n'
+                        f'Описание: {user[7]}\n'
                         f'Пол: {user[5]}\n'
                         f'Возраст: {user[6]}\n'
-                        f'Образование: {user[7]}\n'
+                        f'Образование: {user[4]}\n'
                         f'Время размещения: {user[8]}\n')
         else:
             await message.answer(
                 text=f'User_id: {user[0]}\n'
                      f'Имя: {user[2]}\n'
                      f'Email: {user[3]}\n'
-                     f'Описание: {user[4]}\n'
+                     f'Описание: {user[7]}\n'
                      f'Пол: {user[5]}\n'
                      f'Возраст: {user[6]}\n'
-                     f'Образование: {user[7]}\n'
+                     f'Образование: {user[4]}\n'
                      f'Время размещения: {user[8]}\n')
